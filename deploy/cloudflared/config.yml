@@ -1,13 +1,33 @@
 tunnel: 3b0d7940-ebf3-4aed-8d62-68514f0fe3d5
 credentials-file: /etc/cloudflared/3b0d7940-ebf3-4aed-8d62-68514f0fe3d5.json
 ingress:
-  # Gateway - API entry point
+  # Gateway
   - hostname: dev1-api.vucongtuanduong.dpdns.org
-    service: http://localhost:30566
+    service: http://gateway:8080
+
+  # Assignment Service
+  - hostname: dev1-assignment.vucongtuanduong.dpdns.org
+    service: http://assignment-service:8081
+
+  # Submission Service
+  - hostname: dev1-submission.vucongtuanduong.dpdns.org
+    service: http://submission-service:8082
+
+  # Grading Service
+  - hostname: dev1-grading.vucongtuanduong.dpdns.org
+    service: http://grading-service:8083
+
+  # Result Service
+  - hostname: dev1-result.vucongtuanduong.dpdns.org
+    service: http://result-service:8084
+
+  # Notification Service
+  - hostname: dev1-notification.vucongtuanduong.dpdns.org
+    service: http://notification-service:8085
 
   # ArgoCD
   - hostname: dev1-argocd.vucongtuanduong.dpdns.org
-    service: http://localhost:30566
+    service: http://argocd-server:80
 
-  # Catch-all: return 404
+  # Catch-all
   - service: http_status:404
