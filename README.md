@@ -39,21 +39,35 @@ Source Repo                          Config Repo
 
 ### Buoc 1: Tao repos tren GitHub
 
-Moi service can 2 repos:
-- `grading-<service>-test2` (source)
-- `grading-<service>-config-test2` (config)
+```bash
+pip install requests
+python3 create-repos.py <github-token> <org-name> [private]
+```
 
-### Buoc 2: Tao secrets trong Source Repo
+### Buoc 2: Setup Organization Secrets
 
-Vao Source Repo > Settings > Secrets and variables > Actions:
+Organization secrets duoc share giua tat ca repos, khong can set tung repo.
 
-| Secret | Gia tri |
-|--------|---------|
-| `CONFIG_REPO_TOKEN` | GitHub PAT voi quyen `repo` |
+Vao: `https://github.com/<org>/settings/secrets/actions`
+
+Tao cac secrets:
+
+| Secret Name | Value |
+|-------------|-------|
 | `DOCKERHUB_USERNAME` | Username Docker Hub |
 | `DOCKERHUB_TOKEN` | Token Docker Hub |
+| `CONFIG_REPO_TOKEN` | GitHub PAT voi quyen `repo` |
 
-### Buoc 3: Deploy ArgoCD Applications
+Chon visibility: **All repositories**
+
+### Buoc 3: Push code vao repos
+
+```bash
+pip install requests gitpython
+python3 setup-repos.py <github-token> <org-name>
+```
+
+### Buoc 4: Deploy ArgoCD Applications
 
 ```bash
 kubectl apply -f deploy/argocd-apps/gateway.yaml
@@ -61,12 +75,11 @@ kubectl apply -f deploy/argocd-apps/assignment-service.yaml
 # ... cac service khac
 ```
 
-### Buoc 4: Update config thu cong (neu can)
+### Buoc 5: Start Cloudflare Tunnel
 
 ```bash
-./update-config.sh assignment-service abc123
-cd config-repos/assignment-service
-git add . && git commit -m "Update" && git push
+bash deploy/cloudflared/setup-tunnel.sh
+docker compose -f deploy/cloudflared/docker-compose.yml up -d
 ```
 
 ## Danh sach repos
@@ -81,3 +94,13 @@ git add . && git commit -m "Update" && git push
 | result-service | grading-result-service-test2 | grading-result-service-config-test2 |
 | notification-service | grading-notification-service-test2 | grading-notification-service-config-test2 |
 | common-lib | grading-common-lib-test2 | - |
+| config (Spring) | grading-config-test2 | - |
+
+## Scripts
+
+| Script | Muc dich |
+|--------|----------|
+| `create-repos.py` | Tao 16 repos tren GitHub |
+| `setup-repos.py` | Push code vao tung repo |
+| `update-config.sh` | Update IMAGE_TAG thu cong (neu can) |
+| `split-repos.sh` | Huong dan tach repo |
