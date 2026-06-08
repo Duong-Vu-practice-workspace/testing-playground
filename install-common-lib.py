@@ -12,7 +12,7 @@ import subprocess
 import requests
 
 REPO = "Duong-Vu-practice-workspace/grading-common-lib-test2"
-DEFAULT_VERSION = "1.0.0"
+DEFAULT_VERSION = "1.0.0-test2"
 
 def main():
     version = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_VERSION
