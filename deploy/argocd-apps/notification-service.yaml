@@ -6,9 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Duong-Vu-practice-workspace/grading-notification-service-config-test2.git
+    repoURL: https://github.com/Duong-Vu-practice-workspace/grading-config-test2.git
     targetRevision: main
     path: .
+    helm:
+      valueFiles:
+        - overlays/stg/notification-service-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: web-grading

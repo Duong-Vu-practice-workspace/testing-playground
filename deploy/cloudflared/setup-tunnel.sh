@@ -31,13 +31,23 @@ echo "Done"
 echo ""
 echo "=== Route DNS ==="
 cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-api.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-assignment.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-submission.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-grading.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-result.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-notification.${DOMAIN}" || true
 cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-argocd.${DOMAIN}" || true
 
 echo ""
 echo "=== Neu route DNS loi (domain khong tren Cloudflare): ==="
 echo "Them CNAME records tai DNS provider (dpdns.org):"
-echo "  dev1-api      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev1-argocd   CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev1-api         CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev1-assignment  CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev1-submission  CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev1-grading     CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev1-result      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev1-notification CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev1-argocd      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
 
 echo ""
 echo "Xong thi chay:"

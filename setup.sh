@@ -24,6 +24,12 @@ bash "$SCRIPT_DIR/deploy/install-argocd.sh"
 echo ""
 echo "=== 3. Setup Cloudflare Tunnel ==="
 bash "$SCRIPT_DIR/deploy/cloudflared/setup-tunnel.sh" || echo "  Tunnel co the da ton tai, skip"
+
+# Copy cloudflared config
+echo "  Copy cloudflared config..."
+sudo mkdir -p /etc/cloudflared
+sudo cp "$SCRIPT_DIR/deploy/cloudflared/config.yml" /etc/cloudflared/config.yml
+
 docker compose -f "$SCRIPT_DIR/deploy/cloudflared/docker-compose.yml" up -d
 
 echo ""
@@ -37,13 +43,14 @@ echo "========================================"
 echo ""
 echo "  ArgoCD:    https://dev1-argocd.vucongtuanduong.dpdns.org (admin)"
 echo ""
-echo "  Services:"
+echo "  Services (qua cloudflared tunnel):"
 echo "    gateway:              https://dev1-api.vucongtuanduong.dpdns.org"
-echo "    config-server:        http://config-server-service:8086"
-echo "    assignment-service:   http://assignment-service:8081"
-echo "    submission-service:   http://submission-service:8082"
-echo "    grading-service:      http://grading-service:8083"
-echo "    result-service:       http://result-service:8084"
-echo "    notification-service: http://notification-service:8085"
+echo "    assignment-service:   https://dev1-assignment.vucongtuanduong.dpdns.org"
+echo "    submission-service:   https://dev1-submission.vucongtuanduong.dpdns.org"
+echo "    grading-service:      https://dev1-grading.vucongtuanduong.dpdns.org"
+echo "    result-service:       https://dev1-result.vucongtuanduong.dpdns.org"
+echo "    notification-service: https://dev1-notification.vucongtuanduong.dpdns.org"
+echo ""
+echo "  Config repo: https://github.com/Duong-Vu-practice-workspace/grading-config-test2"
 echo ""
 echo "  Sau boot lai: bash start.sh"
