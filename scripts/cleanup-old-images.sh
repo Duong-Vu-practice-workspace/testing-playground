@@ -2,9 +2,9 @@
 set -euo pipefail
 
 TMP_DIR=$(mktemp -d)
-git clone --depth 1 https://github.com/Duong-Vu-practice-workspace/web-programming-grading-config-test2.git "$TMP_DIR" 2>/dev/null
+git clone --depth 1 https://github.com/Duong-Vu-practice-workspace/grading-config-server-config-test2.git "$TMP_DIR" 2>/dev/null
 
-CURRENT_TAG=$(grep '^  tag:' "$TMP_DIR/values-stg.yaml" | awk '{print $2}' | tr -d '"')
+CURRENT_TAG=$(grep 'image:' "$TMP_DIR/deployment.yaml" | head -1 | grep -oP 'grading-config-server:\K[^:]+' | tr -d ' ')
 rm -rf "$TMP_DIR"
 
 echo "Tag hiện tại: $CURRENT_TAG"
