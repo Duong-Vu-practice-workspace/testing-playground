@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grading-service
+  namespace: grading-platform
+  labels:
+    app: grading-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grading-service
+  template:
+    metadata:
+      labels:
+        app: grading-service
+    spec:
+      containers:
+        - name: grading-service
+          image: grading/grading-service:latest
+          ports:
+            - containerPort: 8083
+          env:
+            - name: DB_HOST
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: grading_db
+            - name: DB_USERNAME
+              value: postgres
+            - name: DB_PASSWORD
+              value: postgres
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
+            - name: MINIO_ENDPOINT
+              value: http://minio:9000
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+            - name: grading-tmp
+              mountPath: /tmp/grading
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket
+        - name: grading-tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grading-service
+  namespace: grading-platform
+spec:
+  selector:
+    app: grading-service
+  ports:
+    - port: 8083
+      targetPort: 8083
+  type: ClusterIP

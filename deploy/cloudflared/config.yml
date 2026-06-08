@@ -1,0 +1,13 @@
+tunnel: 3b0d7940-ebf3-4aed-8d62-68514f0fe3d5
+credentials-file: /etc/cloudflared/3b0d7940-ebf3-4aed-8d62-68514f0fe3d5.json
+ingress:
+  # Gateway - API entry point
+  - hostname: dev1-api.vucongtuanduong.dpdns.org
+    service: http://localhost:30566
+
+  # ArgoCD
+  - hostname: dev1-argocd.vucongtuanduong.dpdns.org
+    service: http://localhost:30566
+
+  # Catch-all: return 404
+  - service: http_status:404

@@ -1,0 +1,40 @@
+# Maven
+target/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Docker
+*.log
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kubernetes
+kubeconfig
+
+# Build
+build/
+out/
+
+# Service repos (each has its own git repo)
+services/gateway/
+services/assignment-service/
+services/submission-service/
+services/grading-service/
+services/result-service/
+services/notification-service/
+services/config-server/
+services/common-lib/
+
+# Config repos
+config-repos/

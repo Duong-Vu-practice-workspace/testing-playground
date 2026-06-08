@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: submission-service
+  namespace: grading-platform
+  labels:
+    app: submission-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: submission-service
+  template:
+    metadata:
+      labels:
+        app: submission-service
+    spec:
+      containers:
+        - name: submission-service
+          image: grading/submission-service:latest
+          ports:
+            - containerPort: 8082
+          env:
+            - name: DB_HOST
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: submission_db
+            - name: DB_USERNAME
+              value: postgres
+            - name: DB_PASSWORD
+              value: postgres
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
+            - name: MINIO_ENDPOINT
+              value: http://minio:9000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: submission-service
+  namespace: grading-platform
+spec:
+  selector:
+    app: submission-service
+  ports:
+    - port: 8082
+      targetPort: 8082
+  type: ClusterIP
