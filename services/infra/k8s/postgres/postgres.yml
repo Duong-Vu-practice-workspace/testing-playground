@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
-  namespace: grading-platform
+  namespace: web-grading
   labels:
     app: postgres
 spec:
@@ -42,7 +42,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres
-  namespace: grading-platform
+  namespace: web-grading
 spec:
   selector:
     app: postgres
@@ -55,7 +55,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-pvc
-  namespace: grading-platform
+  namespace: web-grading
 spec:
   accessModes:
     - ReadWriteOnce
@@ -67,7 +67,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgres-init-scripts
-  namespace: grading-platform
+  namespace: web-grading
 data:
   init-dbs.sh: |
     #!/bin/bash
@@ -77,3 +77,4 @@ data:
     psql -U postgres -c "CREATE DATABASE grading_db;"
     psql -U postgres -c "CREATE DATABASE result_db;"
     psql -U postgres -c "CREATE DATABASE notification_db;"
+    psql -U postgres -c "CREATE DATABASE web_grading_db;"
