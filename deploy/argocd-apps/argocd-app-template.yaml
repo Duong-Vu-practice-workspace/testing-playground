@@ -1,12 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: grading
+  name: grading-${SERVICE_NAME}
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: https://github.com/Duong-Vu-practice-workspace/grading-config-test2.git
+    repoURL: https://github.com/Duong-Vu-practice-workspace/${CONFIG_REPO}.git
     targetRevision: main
     path: .
     helm:
@@ -20,4 +20,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+      - CreateNamespace=false

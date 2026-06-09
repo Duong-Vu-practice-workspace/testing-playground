@@ -1,7 +1,6 @@
 tunnel: dev2-web-grading
 credentials-file: /etc/cloudflared/7fdb94b6-9741-4f78-bfdc-a8e6e3d37119.json
 ingress:
-  # K8s services via Traefik NodePort
   - hostname: dev2-api.vucongtuanduong.dpdns.org
     service: http://localhost:31242
 
@@ -26,5 +25,7 @@ ingress:
   - hostname: dev2-argocd.vucongtuanduong.dpdns.org
     service: http://localhost:31242
 
-  # Catch-all
+  - hostname: dev2-keycloak.vucongtuanduong.dpdns.org
+    service: http://localhost:31242
+
   - service: http_status:404

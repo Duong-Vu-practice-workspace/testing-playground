@@ -13,43 +13,24 @@ else
 fi
 
 TUNNEL_ID=$(cloudflared tunnel info "${TUNNEL_NAME}" 2>&1 | grep -oP 'tunnel \K[a-f0-9-]+')
-echo ""
-echo "=== Tunnel ID: ${TUNNEL_ID} ==="
+echo "Tunnel ID: ${TUNNEL_ID}"
 
 echo ""
 echo "=== Cap nhat config.yml ==="
 sed -i "s|credentials-file:.*|credentials-file: /etc/cloudflared/${TUNNEL_ID}.json|" "${SCRIPT_DIR}/config.yml"
 
-echo "=== Copy config.yml vao ~/.cloudflared/ + fix permissions ==="
+echo "=== Copy config.yml vao ~/.cloudflared/ ==="
 cp "${SCRIPT_DIR}/config.yml" ~/.cloudflared/config.yml
 chmod 755 ~/.cloudflared
 chmod 644 ~/.cloudflared/config.yml
 chmod 644 ~/.cloudflared/${TUNNEL_ID}.json 2>/dev/null || true
-echo "Done"
 
 echo ""
 echo "=== Route DNS ==="
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-api.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-assignment.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-submission.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-grading.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-result.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-notification.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-config.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-argocd.${DOMAIN}" || true
+for sub in api assignment submission grading result notification config argocd keycloak; do
+  cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-${sub}.${DOMAIN}" || true
+done
 
 echo ""
-echo "=== Neu route DNS loi (domain khong tren Cloudflare): ==="
-echo "Them CNAME records tai DNS provider (dpdns.org):"
-echo "  dev2-api         CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev2-assignment  CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev2-submission  CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev2-grading     CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev2-result      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev2-notification CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev2-config      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev2-argocd      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-
-echo ""
-echo "Xong thi chay:"
-echo "  docker compose -f ${SCRIPT_DIR}/docker-compose.yml up -d"
+echo "Neu route DNS loi, them CNAME records tai DNS provider:"
+echo "  dev2-* CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
