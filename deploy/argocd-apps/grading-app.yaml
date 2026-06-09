@@ -9,6 +9,9 @@ spec:
     repoURL: https://github.com/Duong-Vu-practice-workspace/grading-config-test2.git
     targetRevision: main
     path: .
+    helm:
+      valueFiles:
+        - values-stg.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: web-grading

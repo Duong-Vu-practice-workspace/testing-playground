@@ -2,7 +2,7 @@
 set -euo pipefail
 
 DOMAIN="${1:-vucongtuanduong.dpdns.org}"
-TUNNEL_NAME="${2:-dev1-web-grading}"
+TUNNEL_NAME="${2:-dev2-web-grading}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "=== Creating cloudflared tunnel: ${TUNNEL_NAME} ==="
@@ -29,26 +29,26 @@ echo "Done"
 
 echo ""
 echo "=== Route DNS ==="
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-api.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-assignment.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-submission.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-grading.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-result.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-notification.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-config.${DOMAIN}" || true
-cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-argocd.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-api.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-assignment.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-submission.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-grading.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-result.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-notification.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-config.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev2-argocd.${DOMAIN}" || true
 
 echo ""
 echo "=== Neu route DNS loi (domain khong tren Cloudflare): ==="
 echo "Them CNAME records tai DNS provider (dpdns.org):"
-echo "  dev1-api         CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev1-assignment  CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev1-submission  CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev1-grading     CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev1-result      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev1-notification CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev1-config      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
-echo "  dev1-argocd      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev2-api         CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev2-assignment  CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev2-submission  CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev2-grading     CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev2-result      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev2-notification CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev2-config      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev2-argocd      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
 
 echo ""
 echo "Xong thi chay:"

@@ -23,5 +23,4 @@ k3s kubectl create secret generic db-secret \
   --from-literal=DB_PASSWORD="${DB_PASSWORD:-postgres}" \
   --dry-run=client -o yaml | k3s kubectl apply -f -
 
-echo "=== Apply ArgoCD Application ==="
-k3s kubectl apply -f "$SCRIPT_DIR/argocd-apps/grading-app.yaml"
+echo "Namespace and secrets created"
