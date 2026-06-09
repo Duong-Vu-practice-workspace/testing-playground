@@ -18,14 +18,13 @@ echo "=== Tunnel ID: ${TUNNEL_ID} ==="
 
 echo ""
 echo "=== Cap nhat config.yml ==="
-sed -i "s/tunnel: .*/tunnel: ${TUNNEL_ID}/" "${SCRIPT_DIR}/config.yml"
 sed -i "s|credentials-file:.*|credentials-file: /etc/cloudflared/${TUNNEL_ID}.json|" "${SCRIPT_DIR}/config.yml"
 
 echo "=== Copy config.yml vao ~/.cloudflared/ + fix permissions ==="
 cp "${SCRIPT_DIR}/config.yml" ~/.cloudflared/config.yml
 chmod 755 ~/.cloudflared
 chmod 644 ~/.cloudflared/config.yml
-chmod 644 ~/.cloudflared/${TUNNEL_ID}.json
+chmod 644 ~/.cloudflared/${TUNNEL_ID}.json 2>/dev/null || true
 echo "Done"
 
 echo ""
@@ -36,6 +35,7 @@ cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-submission.${DOMAIN}" || tru
 cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-grading.${DOMAIN}" || true
 cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-result.${DOMAIN}" || true
 cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-notification.${DOMAIN}" || true
+cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-config.${DOMAIN}" || true
 cloudflared tunnel route dns "${TUNNEL_NAME}" "dev1-argocd.${DOMAIN}" || true
 
 echo ""
@@ -47,6 +47,7 @@ echo "  dev1-submission  CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
 echo "  dev1-grading     CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
 echo "  dev1-result      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
 echo "  dev1-notification CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
+echo "  dev1-config      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
 echo "  dev1-argocd      CNAME -> ${TUNNEL_ID}.cfargotunnel.com"
 
 echo ""

@@ -1,0 +1,50 @@
+{{- range .Values.services }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grading.fullname" $ }}-{{ .name }}
+  labels:
+    app: {{ include "grading.name" $ }}-{{ .name }}
+spec:
+  replicas: {{ .replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "grading.name" $ }}-{{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "grading.name" $ }}-{{ .name }}
+    spec:
+      containers:
+        - name: {{ .name }}
+          image: "{{ $.Values.image.registry }}/{{ .image.repository }}:{{ $.Values.image.tag }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .service.port }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ $.Values.spring.profilesActive }}
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: DB_PORT
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: DB_PASSWORD
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+{{- end }}

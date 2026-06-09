@@ -4,10 +4,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 NAMESPACE="${1:-web-grading}"
 
-echo "=== Tao namespace ${NAMESPACE} ==="
-kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
+echo "=== Creating ${NAMESPACE} namespace ==="
+k3s kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | k3s kubectl apply -f -
 
-echo "=== Tao secret tu .env ==="
+echo "=== Creating secrets from .env ==="
 if [ -f "${SCRIPT_DIR}/../.env" ]; then
   set -o allexport
   source "${SCRIPT_DIR}/../.env"
@@ -15,16 +15,13 @@ if [ -f "${SCRIPT_DIR}/../.env" ]; then
 fi
 
 # Database secrets
-kubectl create secret generic db-secret \
+k3s kubectl create secret generic db-secret \
   --namespace "${NAMESPACE}" \
   --from-literal=DB_HOST="${DB_HOST:-postgres-service}" \
   --from-literal=DB_PORT="${DB_PORT:-5432}" \
   --from-literal=DB_USERNAME="${DB_USERNAME:-postgres}" \
   --from-literal=DB_PASSWORD="${DB_PASSWORD:-postgres}" \
-  --dry-run=client -o yaml | kubectl apply -f -
+  --dry-run=client -o yaml | k3s kubectl apply -f -
 
-echo "=== Apply ArgoCD Applications ==="
-for app in "$SCRIPT_DIR"/argocd-apps/*.yaml; do
-  echo "  Applying $(basename "$app")..."
-  kubectl apply -f "$app"
-done
+echo "=== Apply ArgoCD Application ==="
+k3s kubectl apply -f "$SCRIPT_DIR/argocd-apps/grading-app.yaml"

@@ -38,3 +38,8 @@ services/common-lib/
 
 # Config repos
 config-repos/
+
+
+**/test-ci-cd/**
+**/web-programming-grading-config-test1/**
+**/web-programming-grading-test1/**

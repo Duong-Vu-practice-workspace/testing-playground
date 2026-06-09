@@ -1,33 +1,30 @@
-tunnel: 3b0d7940-ebf3-4aed-8d62-68514f0fe3d5
-credentials-file: /etc/cloudflared/3b0d7940-ebf3-4aed-8d62-68514f0fe3d5.json
+tunnel: dev1-web-grading
+credentials-file: /etc/cloudflared/dev1-web-grading.json
 ingress:
-  # Gateway
+  # K8s services via Traefik NodePort
   - hostname: dev1-api.vucongtuanduong.dpdns.org
-    service: http://localhost:30000
+    service: http://localhost:31242
 
-  # Assignment Service
   - hostname: dev1-assignment.vucongtuanduong.dpdns.org
-    service: http://localhost:30001
+    service: http://localhost:31242
 
-  # Submission Service
   - hostname: dev1-submission.vucongtuanduong.dpdns.org
-    service: http://localhost:30002
+    service: http://localhost:31242
 
-  # Grading Service
   - hostname: dev1-grading.vucongtuanduong.dpdns.org
-    service: http://localhost:30003
+    service: http://localhost:31242
 
-  # Result Service
   - hostname: dev1-result.vucongtuanduong.dpdns.org
-    service: http://localhost:30004
+    service: http://localhost:31242
 
-  # Notification Service
   - hostname: dev1-notification.vucongtuanduong.dpdns.org
-    service: http://localhost:30005
+    service: http://localhost:31242
 
-  # ArgoCD
+  - hostname: dev1-config.vucongtuanduong.dpdns.org
+    service: http://localhost:31242
+
   - hostname: dev1-argocd.vucongtuanduong.dpdns.org
-    service: http://localhost:8080
+    service: http://localhost:31242
 
   # Catch-all
   - service: http_status:404
